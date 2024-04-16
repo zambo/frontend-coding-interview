@@ -21,7 +21,7 @@ Thank you for taking the time to interview with Clever. This coding challenge is
 ### Details
 - Mocks for these pages are provided in Figma. You should have been sent an invite to access them, if not let us know.
   - [Figma Mocks](https://www.figma.com/file/wr1seCuhlRtoFGuz1iWgyF/Frontend-Coding-Mocks?type=design&node-id=0%3A1&mode=design&t=Uw1av3TypDUDcLAd-1)
-- There is also a logo and an icon provided in svg included in this repo.
+- There is also a logo and an icon provided (SVGs) included in this repo.
 - Pexels API Info
   - Api Key: `Mz0iC21IFLz9HuN8ypIbJ54l8OuGnpW2IsVoQrYBEyagQXt1YeBEA7H0`
   - Include an `Authorization` header with this value.
@@ -29,10 +29,10 @@ Thank you for taking the time to interview with Clever. This coding challenge is
   - Documenation: https://www.pexels.com/api/documentation/#photos-search
 - Make the "Sign in" page functional. However, you can spoof authentication any way you'd like (eg. save a value to local storage, etc).
 - Make "All photos" require authentication to access.
-- Only need show 10 photos on the "All photos" page. Paging is not required.
+- Only need to show 10 photos on the "All photos" page. Paging is not required.
 
 ### Final Thoughts
 
-Remember, please don't spend too much time on this. In fact, save a little time and **add a section to the README** outlining what else you'd do differently if this was going to be a production ready app.
+Remember, please don't spend too much time on this. In fact, save a little time and **add a section to the README** outlining what else you'd do differently to make this a production ready app.
 
-**Any questions**, just let us know. Emai us at <a href="mailto:james.crain@movewithclever.com">james.crain@movewithclever.com</a>. Good luck!
+**Any questions**, just let us know. Send emails to <a href="mailto:james.crain@movewithclever.com">james.crain@movewithclever.com</a>. Good luck!
