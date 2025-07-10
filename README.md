@@ -21,6 +21,7 @@ Thank you for taking the time to interview with Clever. This coding challenge is
 ### Details
 - Mocks for these pages are provided in Figma. You should have been sent an invite to access them, if not let us know.
   - [Figma Mocks](https://www.figma.com/file/wr1seCuhlRtoFGuz1iWgyF/Frontend-Coding-Mocks?type=design&node-id=0%3A1&mode=design&t=Uw1av3TypDUDcLAd-1)
+  - We are looking for attention to detail when implementing these.
 - There is also a logo and an icon provided (SVGs) included in this repo.
 - Pexels API Info
   - Api Key: `Mz0iC21IFLz9HuN8ypIbJ54l8OuGnpW2IsVoQrYBEyagQXt1YeBEA7H0`
