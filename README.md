@@ -6,7 +6,7 @@ Thank you for taking the time to interview with Clever. This coding challenge is
 ### Requirements
 - Create a small web app using React and Typescript.
 - Up to you how you scaffold it (eg. Next, Vite, even CRA).
-- However, please use either `npm` or `yarn.
+- However, please use either `npm` or `yarn`.
 - It will utilize the Pexels API to pull in some photos. Details below.
 - We'd like you to create two (mobile responsive) pages:
   1. Sign in
