@@ -1,13 +1,12 @@
 import React from "react";
+import SignInForm from "@/components/ui/blocks/SignInForm";
 
 const SignIn: React.FC = () => {
   return (
-    <>
-      <main>
-        <h1>Sign In</h1>
-        {/* Add your sign in form here */}
-      </main>
-    </>
+    <main>
+      <h1>Sign In</h1>
+      <SignInForm />
+    </main>
   );
 };
 
