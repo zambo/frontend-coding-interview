@@ -33,6 +33,10 @@ Drafting some things... The goal it to have the figma mockup working, but... if 
 - [ ] form validation with react-hook-form and zod
 - [ ] protected routes, let's try to keep it simple before using something like next-auth or better-auth
 
+note: was going to build the components from scratch, but since I'm going to run low on time, I'mm use shadcn for now..
+
+changed my mind, going to handle auth with next form actions
+
 ---
 
 ## BDD

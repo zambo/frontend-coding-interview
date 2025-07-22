@@ -1,32 +1,22 @@
-import { User, LoginCredentials } from "@/types/auth";
-import { STORAGE_KEYS } from "./constants";
+import { cookies } from "next/headers";
+import { User } from "@/types/auth";
 
 export const authUtils = {
-  login: async (credentials: LoginCredentials): Promise<User> => {
-    // TODO: Replace with actual auth logic
-    const mockUser: User = {
-      id: "1",
-      email: credentials.email,
-      name: "Mock User",
-    };
+  getCurrentUser: async (): Promise<User | null> => {
+    const cookieStore = await cookies();
+    const userData = cookieStore.get("user-data");
 
-    localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(mockUser));
-    localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, "mock_token");
+    if (!userData) return null;
 
-    return mockUser;
+    try {
+      return JSON.parse(userData.value);
+    } catch {
+      return null;
+    }
   },
 
-  logout: () => {
-    localStorage.removeItem(STORAGE_KEYS.USER_DATA);
-    localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
-  },
-
-  getCurrentUser: (): User | null => {
-    const savedUser = localStorage.getItem(STORAGE_KEYS.USER_DATA);
-    return savedUser ? JSON.parse(savedUser) : null;
-  },
-
-  isAuthenticated: (): boolean => {
-    return !!localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
+  isAuthenticated: async (): Promise<boolean> => {
+    const cookieStore = await cookies();
+    return !!cookieStore.get("auth-token");
   },
 };

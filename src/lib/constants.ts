@@ -1,3 +1,6 @@
+export const API_BASE_URL = process.env.PEXELS_API_URL || "";
+export const API_KEY = process.env.PEXELS_API_KEY || "";
+
 export const API_ENDPOINTS = {
   PEXELS_SEARCH: "/search",
 } as const;

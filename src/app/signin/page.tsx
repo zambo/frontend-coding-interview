@@ -1,5 +1,5 @@
 import React from "react";
-import SignInForm from "@/components/ui/blocks/SignInForm";
+import { SignInForm } from "@/components/ui/blocks/SignInForm";
 
 const SignIn: React.FC = () => {
   return (
