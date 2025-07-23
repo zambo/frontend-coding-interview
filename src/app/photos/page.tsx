@@ -1,7 +1,9 @@
-import { Button } from "@/components/ui/base/button";
 import { authUtils } from "@/lib/auth";
-import { signOutAction } from "@/lib/actions";
 import { redirect } from "next/navigation";
+import { Container } from "@/components/ui/base/container";
+import { PhotoItem } from "@/components/ui/blocks/PhotoItem";
+import { API_BASE_URL, API_KEY, API_ENDPOINTS } from "@/lib/constants";
+import type { PexelsResponse } from "@/types/photo";
 
 export default async function Photos() {
   const isAuthenticated = await authUtils.isAuthenticated();
@@ -10,32 +12,39 @@ export default async function Photos() {
     redirect("/signin");
   }
 
-  const user = await authUtils.getCurrentUser();
+  const res = await fetch(
+    `${API_BASE_URL}${API_ENDPOINTS.PEXELS_SEARCH}?query=nature&per_page=10`,
+    {
+      headers: {
+        Authorization: API_KEY,
+      },
+      cache: "no-store", // Ensures fresh data on each request (Next.js best practice for dynamic data)
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch photos");
+  }
+
+  const data: PexelsResponse = await res.json();
 
   return (
-    <main className="container mx-auto p-8">
-      <div className="flex justify-between items-center mb-8">
+    <Container as="main">
+      <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">Photos</h1>
-          <p className="text-muted-foreground">
-            Welcome back, {user?.name || user?.email}!
-          </p>
+          <h1 className="font-bold text-xl mb-11">All Photos</h1>
         </div>
-        <form action={signOutAction}>
-          <Button type="submit" variant="outline">
-            Sign Out
-          </Button>
-        </form>
+        {/* <form action={signOutAction}> */}
+        {/*   <Button type="submit" variant="outline"> */}
+        {/*     Sign Out */}
+        {/*   </Button> */}
+        {/* </form> */}
       </div>
-
-      <div className="bg-card border rounded-lg p-6">
-        <p className="text-muted-foreground">
-          Photos will be displayed here using the Pexels API.
-        </p>
-        <p className="text-sm text-muted-foreground mt-2">
-          This page is protected - you can only see it when authenticated.
-        </p>
+      <div className="grid grid-cols-1 gap-6">
+        {data.photos.map((photo) => (
+          <PhotoItem key={photo.id} {...photo} />
+        ))}
       </div>
-    </main>
+    </Container>
   );
 }

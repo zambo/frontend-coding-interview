@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Logo } from "@/components/ui/base/logo";
 import "./globals.css";
 import { Container } from "@/components/ui/base/container";
 
@@ -16,8 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`antialiased`}>
-        <Container className="flex flex-col items-center md:justify-center min-h-screen px-4 py-12">
-          <Logo />
+        <Container className="flex flex-col items-center min-h-screen px-4 py-12">
           {children}
         </Container>
       </body>

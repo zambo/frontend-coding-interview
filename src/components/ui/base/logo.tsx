@@ -3,6 +3,7 @@ interface Logo {
   height?: number;
   mainFill?: string;
   secondaryFill?: string;
+  className?: string;
 }
 
 export function Logo({

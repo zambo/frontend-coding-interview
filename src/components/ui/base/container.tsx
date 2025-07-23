@@ -15,7 +15,7 @@ function Container<T extends React.ElementType = "div">({
 }: ContainerProps<T>) {
   const Tag = as || "div";
   return (
-    <Tag className={cn("max-w-lg mx-auto p-4", className)} {...rest}>
+    <Tag className={cn("max-w-2xl container mx-auto p-4", className)} {...rest}>
       {children}
     </Tag>
   );
