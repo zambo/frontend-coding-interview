@@ -1,51 +1,31 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent } from "@testing-library/react";
 
-// Mock server action directly
-const mockSignInAction = jest.fn();
+// Mock the server action
+jest.mock("@/lib/actions", () => ({
+  signInAction: jest.fn(),
+}));
 
 // Mock the SubmitButton to avoid useFormStatus issues in tests
 jest.mock("../SubmitButton", () => ({
   SubmitButton: () => <button type="submit">Sign In</button>,
 }));
 
-// Create a test version of SignInForm that doesn't import the action
-function TestSignInForm() {
-  return (
-    <form action={mockSignInAction} className="space-y-8">
-      <div className="grid gap-2">
-        <label htmlFor="username" className="text-sm font-medium">
-          Username
-        </label>
-        <input
-          id="username"
-          name="username"
-          type="email"
-          placeholder="Enter your email"
-          required
-          className="border rounded px-2 py-1"
-        />
-      </div>
-      <div className="grid gap-2">
-        <label htmlFor="password" className="text-sm font-medium">
-          Password
-        </label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          placeholder="Enter your password"
-          required
-          className="border rounded px-2 py-1"
-        />
-      </div>
-      <button type="submit">Sign In</button>
-    </form>
-  );
-}
+// Import the actual component after mocking
+import { SignInForm } from "../SignInForm";
+import * as actions from "@/lib/actions";
+
+const mockSignInAction = actions.signInAction as jest.MockedFunction<
+  typeof actions.signInAction
+>;
 
 describe("SignInForm", () => {
+  beforeEach(() => {
+    mockSignInAction.mockClear();
+  });
+
   it("renders username and password inputs", () => {
-    render(<TestSignInForm />);
+    render(<SignInForm />);
 
     expect(screen.getByLabelText(/username/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
@@ -54,15 +34,33 @@ describe("SignInForm", () => {
     ).toBeInTheDocument();
   });
 
-  it("has proper form structure for server actions", () => {
-    render(<TestSignInForm />);
+  it("has proper form structure with react-hook-form", () => {
+    render(<SignInForm />);
 
-    const usernameInput = screen.getByRole("textbox", { name: /username/i });
+    const usernameInput = screen.getByLabelText(/username/i);
     const passwordInput = screen.getByLabelText(/password/i);
 
-    expect(usernameInput).toHaveAttribute("name", "username");
     expect(usernameInput).toHaveAttribute("type", "email");
-    expect(passwordInput).toHaveAttribute("name", "password");
+    expect(usernameInput).toHaveAttribute("placeholder", "Enter your email");
     expect(passwordInput).toHaveAttribute("type", "password");
+    expect(passwordInput).toHaveAttribute("placeholder", "Enter your password");
+  });
+
+  it("calls signInAction with valid form data", async () => {
+    mockSignInAction.mockResolvedValue(undefined);
+
+    render(<SignInForm />);
+
+    const usernameInput = screen.getByLabelText(/username/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const submitButton = screen.getByRole("button", { name: /sign in/i });
+
+    fireEvent.change(usernameInput, { target: { value: "test@example.com" } });
+    fireEvent.change(passwordInput, { target: { value: "password123" } });
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(mockSignInAction).toHaveBeenCalledWith(expect.any(FormData));
+    });
   });
 });

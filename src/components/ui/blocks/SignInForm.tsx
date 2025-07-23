@@ -1,110 +1,105 @@
 "use client";
 
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { signInAction } from "@/lib/actions";
 import { Input } from "@/components/ui/base/input";
-import { Label } from "@/components/ui/base/label";
 import { SubmitButton } from "./SubmitButton";
 import { cn } from "@/lib/utils";
-
-interface FormErrors {
-  username?: string;
-  password?: string;
-  general?: string;
-}
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/base/form";
+import { signInSchema, type SignInFormData } from "@/lib/validation";
 
 export function SignInForm(props: React.HTMLAttributes<HTMLFormElement>) {
-  const [errors, setErrors] = useState<FormErrors>({});
+  const [generalError, setGeneralError] = useState<string>("");
 
-  const handleSubmit = async (formData: FormData) => {
-    setErrors({});
+  const form = useForm<SignInFormData>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+  });
 
-    // Client-side validation
-    const username = formData.get("username") as string;
-    const password = formData.get("password") as string;
-    const newErrors: FormErrors = {};
-
-    if (!username) {
-      newErrors.username = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(username)) {
-      newErrors.username = "Please enter a valid email address";
-    }
-
-    if (!password) {
-      newErrors.password = "Password is required";
-    } else if (password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
-    }
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
+  const handleSubmit = async (data: SignInFormData) => {
+    setGeneralError("");
 
     try {
+      const formData = new FormData();
+      formData.append("username", data.username);
+      formData.append("password", data.password);
       await signInAction(formData);
     } catch (error) {
-      setErrors({
-        general:
-          error instanceof Error
-            ? error.message
-            : "An error occurred during sign in",
-      });
+      setGeneralError(
+        error instanceof Error
+          ? error.message
+          : "An error occurred during sign in"
+      );
     }
   };
 
   return (
-    <form action={handleSubmit} className={cn("space-y-8", props.className)}>
-      {errors.general && (
-        <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded">
-          {errors.general}
-        </div>
-      )}
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className={cn("space-y-8", props.className)}
+      >
+        {generalError && (
+          <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded">
+            {generalError}
+          </div>
+        )}
 
-      <div className="grid gap-3">
-        <Label htmlFor="username" className="text-sm font-bold">
-          Username
-        </Label>
-        <Input
-          id="username"
+        <FormField
+          control={form.control}
           name="username"
-          type="email"
-          placeholder="Enter your email"
-          required
-          aria-invalid={!!errors.username}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-sm font-bold">Username</FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="Enter your email" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-        {errors.username && (
-          <p className="text-sm text-red-600">{errors.username}</p>
-        )}
-      </div>
 
-      <div className="grid gap-3">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="password" className="text-sm font-bold">
-            Password
-          </Label>
-          <a
-            href="/forgot-password"
-            className="text-xs text-blue-600 hover:underline"
-            tabIndex={0}
-          >
-            Forgot password?
-          </a>
-        </div>
-        <Input
-          id="password"
+        <FormField
+          control={form.control}
           name="password"
-          type="password"
-          placeholder="Enter your password"
-          required
-          aria-invalid={!!errors.password}
+          render={({ field }) => (
+            <FormItem>
+              <div className="flex items-center justify-between">
+                <FormLabel className="text-sm font-bold">Password</FormLabel>
+                <a
+                  href="/forgot-password"
+                  className="text-xs text-blue-600 hover:underline"
+                  tabIndex={0}
+                >
+                  Forgot password?
+                </a>
+              </div>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder="Enter your password"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-        {errors.password && (
-          <p className="text-sm text-red-600">{errors.password}</p>
-        )}
-      </div>
 
-      <SubmitButton />
-    </form>
+        <SubmitButton />
+      </form>
+    </Form>
   );
 }
