@@ -25,6 +25,8 @@ export async function signInAction(formData: FormData): Promise<void> {
 
   // Mock authentication - in real app, verify against database
   if (username && password.length >= 6) {
+    console.log(`Successful login attempt for: ${username}`);
+
     // Set secure httpOnly cookie
     const cookieStore = await cookies();
     cookieStore.set("auth-token", "mock-token", {
@@ -51,6 +53,9 @@ export async function signInAction(formData: FormData): Promise<void> {
 
     redirect("/photos");
   } else {
+    console.log(
+      `Failed login attempt for: ${username || "unknown"} - Invalid credentials`
+    );
     throw new Error("Invalid credentials");
   }
 }
