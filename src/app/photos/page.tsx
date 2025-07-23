@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { Container } from "@/components/ui/base/container";
 import { PhotoList } from "@/components/ui/blocks/PhotoList";
 import { PhotoGridSkeleton } from "@/components/ui/blocks/PhotoItemSkeleton";
+import { ErrorBoundary } from "@/components/ui/blocks/ErrorBoundary";
 
 export default async function Photos() {
   const isAuthenticated = await authUtils.isAuthenticated();
@@ -20,9 +21,11 @@ export default async function Photos() {
         </div>
       </div>
 
-      <Suspense fallback={<PhotoGridSkeleton />}>
-        <PhotoList query="nature" perPage={10} />
-      </Suspense>
+      <ErrorBoundary>
+        <Suspense fallback={<PhotoGridSkeleton />}>
+          <PhotoList query="nature" perPage={10} />
+        </Suspense>
+      </ErrorBoundary>
     </Container>
   );
 }

@@ -2,14 +2,9 @@
 
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { z } from "zod";
 import { API_BASE_URL, API_KEY, API_ENDPOINTS } from "@/lib/constants";
 import type { PexelsResponse } from "@/types/photo";
-
-const signInSchema = z.object({
-  username: z.string().email("Please enter a valid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-});
+import { signInSchema } from "@/lib/validation";
 
 export async function signInAction(formData: FormData): Promise<void> {
   const result = signInSchema.safeParse({
