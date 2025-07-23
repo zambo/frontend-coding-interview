@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { Logo } from "@/components/ui/base/logo";
 import "./globals.css";
+import { Container } from "@/components/ui/base/container";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -13,7 +15,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased`}>{children}</body>
+      <body className={`antialiased`}>
+        <Container className="flex flex-col items-center md:justify-center min-h-screen px-4 py-12">
+          <Logo />
+          {children}
+        </Container>
+      </body>
     </html>
   );
 }
